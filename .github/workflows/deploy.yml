@@ -37,8 +37,6 @@ jobs:
       - name: Build Source Distribution
         run: |
           python etc/setup.py sdist
-          mkdir -p dist
-          mv dist/*.tar.gz dist/
 
       # Step 6: Deploy to GitHub Releases
       - name: Deploy to GitHub Releases
