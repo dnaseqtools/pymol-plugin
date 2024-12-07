@@ -1,6 +1,7 @@
 name: pymol_project
 channels:
   - conda-forge
+  - schrodinger
 dependencies:
   - python=3.12
   - pymol
