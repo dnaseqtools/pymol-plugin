@@ -28,19 +28,24 @@ jobs:
           conda info
           conda list
 
-      # Step 6: Package the plugin
-      - name: Package the Plugin
+      # Step 4: Install setuptools and wheel (if not already installed)
+      - name: Install Build Tools
         run: |
-          mkdir -p dist
-          zip -r dist.zip src
-          cp dist.zip dist/
+          conda install -c conda-forge setuptools wheel
 
-      # Step 7: Deploy to GitHub Releases
+      # Step 5: Create the .tar.gz package
+      - name: Build Source Distribution
+        run: |
+          python etc/setup.py sdist
+          mkdir -p dist
+          mv dist/*.tar.gz dist/
+
+      # Step 6: Deploy to GitHub Releases
       - name: Deploy to GitHub Releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: dist/*
+          artifacts: dist/*.tar.gz
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.run_number }}
+          tag: v${{ github.run_number }}
           name: DNASeq Kinase Analyzer Plugin Release
           prerelease: false
