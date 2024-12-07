@@ -1,4 +1,4 @@
-name: pymol_project
+name: dnaseq-pymol
 channels:
   - conda-forge
   - schrodinger
