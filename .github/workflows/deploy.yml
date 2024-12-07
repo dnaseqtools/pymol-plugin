@@ -1,0 +1,52 @@
+name: Deploy PyMOL Plugin
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout code
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    # Step 2: Set up Conda
+    - name: Set up Miniconda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        auto-update-conda: true
+        python-version: 3.12
+
+    # Step 3: Create Conda environment
+    - name: Create Conda Environment
+      run: conda env create -f environment.yml
+
+    # Step 4: Activate Conda environment
+    - name: Activate Conda Environment
+      run: echo "conda activate pymol_project" >> $GITHUB_ENV
+
+    # Step 5: Install pip dependencies (if any)
+    - name: Install pip dependencies
+      run: |
+        source activate pymol_project
+        pip install -r requirements.txt
+
+    # Step 6: Package the plugin
+    - name: Package the Plugin
+      run: |
+        mkdir -p dist
+        cp -r my_plugin.py environment.yml README.md dist/
+
+    # Step 7: Deploy to GitHub Releases
+    - name: Deploy to GitHub Releases
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: dist/*
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.run_number }}
+        name: PyMOL Plugin Release
+        prerelease: false
