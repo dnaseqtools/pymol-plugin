@@ -1,5 +1,8 @@
 name: Deploy PyMOL Plugin
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:
