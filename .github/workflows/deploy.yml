@@ -28,17 +28,12 @@ jobs:
           conda info
           conda list
 
-      # Step 5: Install pip dependencies (if any)
-      - name: Install pip dependencies
-        run: |
-          source activate dnaseq-pymol
-          pip install -r etc/requirements.txt
-
       # Step 6: Package the plugin
       - name: Package the Plugin
         run: |
           mkdir -p dist
-          cp -r src/* etc/* README.md dist/
+          zip -r dist.zip src
+          cp dist.zip dist/
 
       # Step 7: Deploy to GitHub Releases
       - name: Deploy to GitHub Releases
@@ -47,5 +42,5 @@ jobs:
           artifacts: dist/*
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.run_number }}
-          name: PyMOL Plugin Release
+          name: DNASeq Kinase Analyzer Plugin Release
           prerelease: false
